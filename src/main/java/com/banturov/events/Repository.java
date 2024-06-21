@@ -1,6 +1,8 @@
 package com.banturov.events;
 
 import java.nio.file.AccessDeniedException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,13 +40,37 @@ public class Repository {
 		roomList.add(new Room(roomNumber));
 	}
 
-	public void addEvent(Long id, String date, Long timInterval, String author, Long numberRoom)
-			throws AttributeNotFoundException {
+	public void addEvent(Long id, String date, Long timeInterval, String author, Long numberRoom,
+			SimpleDateFormat format) throws AttributeNotFoundException, IllegalArgumentException {
+		if (id < 0L) {
+			throw new IllegalArgumentException("Room number can be digit more 0");
+		}
+		if (timeInterval < 1 || timeInterval > 4) {
+			throw new IllegalArgumentException("Time interval between 1 and 4");
+		}
+		try {
+			format.parse(date);
+		} catch (ParseException e) {
+			throw new IllegalArgumentException("Invalid date format");
+		}
+
 		Room roomBuf = new Room(numberRoom);
 		if (!roomList.contains(roomBuf)) {
 			throw new AttributeNotFoundException("No room with id " + numberRoom);
 		}
-		eventList.add(new Event(id, timInterval, date, author, numberRoom));
+
+		for (Event event : eventList) {
+			if (event.getId() == id) {
+				throw new IllegalArgumentException("Id already exist");
+			}
+			if (event.getDate().equals(date) && event.getNumberRoom() == numberRoom
+					&& event.getTimeInterval() == timeInterval) {
+				throw new IllegalArgumentException("The hall already occupied");
+			}
+		}
+
+		eventList.add(new Event(id, timeInterval, date, author, numberRoom));
+
 	}
 
 	public List<Event> filterDate(String date) throws AttributeNotFoundException {
@@ -56,7 +82,7 @@ public class Repository {
 			throw new AttributeNotFoundException("No one events");
 		return takenEvents;
 	}
-	
+
 	public List<Event> filterAuthor(String author) throws AttributeNotFoundException {
 		List<Event> takenEvents = new ArrayList<>();
 		for (Event event : eventList)
@@ -66,7 +92,7 @@ public class Repository {
 			throw new AttributeNotFoundException("No one events");
 		return takenEvents;
 	}
-	
+
 	public List<Event> filterNumberRoom(Long numberRoom) throws AttributeNotFoundException {
 		List<Event> takenEvents = new ArrayList<>();
 		for (Event event : eventList)
@@ -75,6 +101,36 @@ public class Repository {
 		if (takenEvents.isEmpty())
 			throw new AttributeNotFoundException("No one events");
 		return takenEvents;
+	}
+
+	public boolean updateEvent(Long id, String date, Long timeInterval, String author, Long numberRoom,
+			SimpleDateFormat format) throws AttributeNotFoundException {
+		if (id < 0L) {
+			throw new IllegalArgumentException("Room number can be digit more 0");
+		}
+		if (timeInterval < 1 || timeInterval > 4) {
+			throw new IllegalArgumentException("Time interval between 1 and 4");
+		}
+		try {
+			format.parse(date);
+		} catch (ParseException e) {
+			throw new IllegalArgumentException("Invalid date format");
+		}
+
+		Room roomBuf = new Room(numberRoom);
+		if (!roomList.contains(roomBuf)) {
+			throw new AttributeNotFoundException("No room with id " + numberRoom);
+		}
+
+		for (Event event : eventList)
+			if (event.getId() == id && event.getAuthor() == author) {
+				event.setDate(date);
+				event.setTimeInterval(timeInterval);
+				event.setNumberRoom(numberRoom);
+				return true;
+			}
+		throw new AttributeNotFoundException("No one your events");
+
 	}
 
 	public boolean deleteEvent(String username, Long id) throws AccessDeniedException {

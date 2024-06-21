@@ -1,15 +1,19 @@
 package com.banturov.interaction;
 
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 import javax.management.AttributeNotFoundException;
 
 import com.banturov.events.Repository;
+import com.banturov.events.User;
 import com.banturov.exceptions.AlreadyExistException;
 
 public class EventLayer {
 
-	public static void eventPage(Scanner scan) {
+	public static void eventPage(Scanner scan, SimpleDateFormat format, User user) {
+
+		SimpleDateFormat formatter = format;
 
 		Scanner input = scan;
 		Repository rep = new Repository();
@@ -21,7 +25,7 @@ public class EventLayer {
 		String dateEventBuf;
 		String authorEventBuf;
 		Long timIntervalBuffer;
-		
+
 		try {
 			rep.addRoom(10L);
 			rep.addRoom(11L);
@@ -31,9 +35,10 @@ public class EventLayer {
 		}
 
 		try {
-			rep.addEvent(1L, "March", 1L, "GooglePixel", 12L);
-			rep.addEvent(2L, "March", 2L, "GayBanana", 11L);
-			rep.addEvent(3L, "December", 3L, "ChikiBriki", 10L);
+			rep.addEvent(1L, "04-04-2004", 1L, "GooglePixel", 12L, formatter);
+			rep.addEvent(2L, "01-01-2001", 2L, "HonorA900", 11L, formatter);
+			rep.addEvent(3L, "09-12-2024", 2L, "BukaTuka", 10L, formatter);
+			rep.addEvent(4L, "09-12-2024", 3L, "BukaTuka", 10L, formatter);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -49,7 +54,7 @@ public class EventLayer {
 					System.out.println(e.getMessage());
 				}
 				break;
-			case ("2"):
+			case ("2"): //Show events
 				try {
 					System.out.println(rep.showEvent());
 				} catch (AttributeNotFoundException e) {
@@ -72,12 +77,11 @@ public class EventLayer {
 				idEventBuf = input.nextLong();
 				System.out.println("Enter date of event");
 				dateEventBuf = input.next();
-				System.out.println("Enter time interval from 1 to 4");
+				System.out.println("Enter time interval from 1 to 4(9:00-11:00,13:00-15:00,15:00-17:00,17:00-19:00)");
 				timIntervalBuffer = input.nextLong();
-				// System.out.println("Enter author of event");
-				authorEventBuf = "GooglePixel";// input.next();
+				authorEventBuf = user.getName();
 				try {
-					rep.addEvent(idEventBuf, dateEventBuf, timIntervalBuffer, authorEventBuf, roomNumberBuf);
+					rep.addEvent(idEventBuf, dateEventBuf, timIntervalBuffer, authorEventBuf, roomNumberBuf, formatter);
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
@@ -106,16 +110,35 @@ public class EventLayer {
 					System.out.println(e.getMessage());
 				}
 				break;
-			case ("8"):// Delete by id
+			case ("8"):// Update EVENT
+				System.out.println("Enter event id");
 				idEventBuf = input.nextLong();
-				authorEventBuf = "GooglePixel";
+				System.out.println("Enter number of room");
+				roomNumberBuf = input.nextLong();
+				System.out.println("Enter date of event");
+				dateEventBuf = input.next();
+				System.out.println("Enter time interval from 1 to 4(9:00-11:00,13:00-15:00,15:00-17:00,17:00-19:00)");
+				timIntervalBuffer = input.nextLong();
+				authorEventBuf = user.getName();// input.next();
+				try {
+					rep.updateEvent(idEventBuf, dateEventBuf, timIntervalBuffer, authorEventBuf, roomNumberBuf,
+							formatter);
+				} catch (AttributeNotFoundException e) {
+					System.out.println(e.getMessage());
+				}
+				break;
+			case ("9"):// Delete by id
+				idEventBuf = input.nextLong();
+				authorEventBuf = user.getName();
 				try {
 					rep.deleteEvent(authorEventBuf, idEventBuf);
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
 				break;
-				
+			default:
+				System.out.println("Unsupported option");
+
 			}
 		}
 	}
