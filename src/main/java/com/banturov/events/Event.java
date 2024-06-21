@@ -5,12 +5,14 @@ import java.util.Objects;
 public class Event {
 
 	private Long id;
+	private Long timeInterval;
 	private String date;
 	private String author;
 	private Long numberRoom;
 
-	public Event(Long id, String date, String author, Long numberRoom) {
+	public Event(Long id, Long timeInterval, String date, String author, Long numberRoom) {
 		this.id = id;
+		this.timeInterval = timeInterval;
 		this.date = date;
 		this.author = author;
 		this.numberRoom = numberRoom;
@@ -22,6 +24,14 @@ public class Event {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getTimeInterval() {
+		return timeInterval;
+	}
+
+	public void setTimeInterval(Long timeInterval) {
+		this.timeInterval = timeInterval;
 	}
 
 	public String getDate() {
@@ -50,7 +60,7 @@ public class Event {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(author, date, id, numberRoom);
+		return Objects.hash(author, date, id, numberRoom, timeInterval);
 	}
 
 	@Override
@@ -63,12 +73,16 @@ public class Event {
 			return false;
 		Event other = (Event) obj;
 		return Objects.equals(author, other.author) && Objects.equals(date, other.date) && Objects.equals(id, other.id)
-				&& Objects.equals(numberRoom, other.numberRoom);
+				&& Objects.equals(numberRoom, other.numberRoom) && Objects.equals(timeInterval, other.timeInterval);
 	}
 
 	@Override
 	public String toString() {
-		return "||Event " + id + ", date=" + date + ", author=" + author + ", numberRoom=" + numberRoom + "||\n";
+		return "Event [id=" + id + ", timeInterval=" + timeInterval + ", date=" + date + ", author=" + author
+				+ ", numberRoom=" + numberRoom + "]\n";
 	}
+
+	
+
 
 }
