@@ -133,18 +133,19 @@ public class Repository {
 
 	}
 
-	public boolean deleteEvent(String username, Long id) throws AccessDeniedException {
+	public List<Event> deleteEvent(String username, Long id) throws AccessDeniedException {
+		List eventListBuf = new ArrayList<>();
 		for (Event event : eventList) {
 			if (event.getId() == id) {
 				if (!event.getAuthor().equals(username)) {
 					throw new AccessDeniedException("Access denied, you are not author");
 				} else {
-					eventList.remove(event);
+					eventListBuf.add(event);
 				}
 			}
 		}
-
-		return true;
+		eventList.removeAll(eventListBuf);
+		return eventListBuf;
 	}
 
 }

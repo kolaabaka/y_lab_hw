@@ -5,6 +5,8 @@ import java.util.Objects;
 public class Room {
 
 	private Long roomNumber;
+	
+	public Room() {}
 
 	public Room(Long roomNumber) {
 		this.roomNumber = roomNumber;

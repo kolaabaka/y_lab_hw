@@ -54,7 +54,7 @@ public class EventLayer {
 					System.out.println(e.getMessage());
 				}
 				break;
-			case ("2"): //Show events
+			case ("2"): // Show events
 				try {
 					System.out.println(rep.showEvent());
 				} catch (AttributeNotFoundException e) {
@@ -131,7 +131,7 @@ public class EventLayer {
 				idEventBuf = input.nextLong();
 				authorEventBuf = user.getName();
 				try {
-					rep.deleteEvent(authorEventBuf, idEventBuf);
+					System.out.println("Delete event - " + rep.deleteEvent(authorEventBuf, idEventBuf));
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
