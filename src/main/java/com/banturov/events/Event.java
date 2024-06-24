@@ -2,6 +2,9 @@ package com.banturov.events;
 
 import java.util.Objects;
 
+/**
+ * Entity for events in halls
+ */
 public class Event {
 
 	private Long id;
@@ -10,6 +13,14 @@ public class Event {
 	private String author;
 	private Long numberRoom;
 
+	/**
+	 * 
+	 * @param id           - primary key
+	 * @param timeInterval - The time interval is from one to four
+	 * @param date
+	 * @param author       - user identity
+	 * @param numberRoom   - hall identity
+	 */
 	public Event(Long id, Long timeInterval, String date, String author, Long numberRoom) {
 		this.id = id;
 		this.timeInterval = timeInterval;
@@ -81,8 +92,5 @@ public class Event {
 		return "Event [id=" + id + ", timeInterval=" + timeInterval + ", date=" + date + ", author=" + author
 				+ ", numberRoom=" + numberRoom + "]\n";
 	}
-
-	
-
 
 }

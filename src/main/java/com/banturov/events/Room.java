@@ -5,9 +5,14 @@ import java.util.Objects;
 public class Room {
 
 	private Long roomNumber;
-	
-	public Room() {}
 
+	public Room() {
+	}
+
+	/**
+	 * 
+	 * @param roomNumber -unique hall id
+	 */
 	public Room(Long roomNumber) {
 		this.roomNumber = roomNumber;
 	}

@@ -6,8 +6,15 @@ import java.util.Scanner;
 
 import com.banturov.events.User;
 
+/**
+ * Registers users and performs authentication
+ */
 public class LoginLayer {
-
+	/**
+	 * @param scan - take Scanner instance for input data
+	 * @return Returns the user to pass it to the next method and exclude
+	 *         unauthorized access
+	 */
 	public static User eventPage(Scanner scan) {
 		Scanner input = scan;
 		boolean programFinish = false;

@@ -10,11 +10,23 @@ import javax.management.AttributeNotFoundException;
 
 import com.banturov.exceptions.AlreadyExistException;
 
+/**
+ * class for interaction with database
+ */
 public class Repository {
 
+	/**
+	 * tables in database event -> room ManyToOne foreign key event.numberRoom
+	 */
 	List<Event> eventList = new ArrayList<>();
 	List<Room> roomList = new ArrayList<>();
 
+	/**
+	 * Show all saved halls
+	 * 
+	 * @return - all saved halls
+	 * @throws AttributeNotFoundException - throw if roomList is empty
+	 */
 	public List<Room> showRoom() throws AttributeNotFoundException {
 		if (roomList.isEmpty()) {
 			throw new AttributeNotFoundException("No one room created");
@@ -22,6 +34,12 @@ public class Repository {
 		return roomList;
 	}
 
+	/**
+	 * Show all saved events
+	 * 
+	 * @return - all saved events
+	 * @throws AttributeNotFoundException - throw if eventList is empty
+	 */
 	public List<Event> showEvent() throws AttributeNotFoundException {
 		if (eventList.isEmpty()) {
 			throw new AttributeNotFoundException("No one event created");
@@ -29,6 +47,14 @@ public class Repository {
 		return eventList;
 	}
 
+	/**
+	 * Add room in storage eventList
+	 * 
+	 * @param roomNumber - the number of the hall where the event is taking place
+	 * @throws AlreadyExistException    - throw if hall already exist in roomList
+	 * @throws IllegalArgumentException - throw if room number is not a natural
+	 *                                  number
+	 */
 	public void addRoom(Long roomNumber) throws AlreadyExistException, IllegalArgumentException {
 		for (Room room : roomList) {
 			if (room.getRoomNumber() == roomNumber)
@@ -40,6 +66,18 @@ public class Repository {
 		roomList.add(new Room(roomNumber));
 	}
 
+	/**
+	 * Add room in storage roomList
+	 * 
+	 * @param id           - event unique id
+	 * @param date         - date of event
+	 * @param timeInterval - time interval in day
+	 * @param author       - user id user.name
+	 * @param numberRoom   - number room in roomList
+	 * @param format       - accepts the date format 'dd-mm-yyyy'
+	 * @throws AttributeNotFoundException - throw if select room is not exist
+	 * @throws IllegalArgumentException   - throw if incorrect validation
+	 */
 	public void addEvent(Long id, String date, Long timeInterval, String author, Long numberRoom,
 			SimpleDateFormat format) throws AttributeNotFoundException, IllegalArgumentException {
 		if (id < 0L) {
@@ -73,6 +111,14 @@ public class Repository {
 
 	}
 
+	/**
+	 * Show all events on select date
+	 * 
+	 * @param date - select date
+	 * @return - list of elements satisfying the condition
+	 * @throws AttributeNotFoundException - throw if no elements satisfying the
+	 *                                    condition
+	 */
 	public List<Event> filterDate(String date) throws AttributeNotFoundException {
 		List<Event> takenEvents = new ArrayList<>();
 		for (Event event : eventList)
@@ -83,6 +129,14 @@ public class Repository {
 		return takenEvents;
 	}
 
+	/**
+	 * Show all events of selected author
+	 * 
+	 * @param author - select author
+	 * @return - list of elements satisfying the condition
+	 * @throws AttributeNotFoundException - throw if no elements satisfying the
+	 *                                    condition
+	 */
 	public List<Event> filterAuthor(String author) throws AttributeNotFoundException {
 		List<Event> takenEvents = new ArrayList<>();
 		for (Event event : eventList)
@@ -93,6 +147,14 @@ public class Repository {
 		return takenEvents;
 	}
 
+	/**
+	 * Show all events in selected hall
+	 * 
+	 * @param numberRoom - select number of hall
+	 * @return - list of elements satisfying the condition
+	 * @throws AttributeNotFoundException - throw if no elements satisfying the
+	 *                                    condition
+	 */
 	public List<Event> filterNumberRoom(Long numberRoom) throws AttributeNotFoundException {
 		List<Event> takenEvents = new ArrayList<>();
 		for (Event event : eventList)
@@ -103,6 +165,17 @@ public class Repository {
 		return takenEvents;
 	}
 
+	/**
+	 * 
+	 * @param id           - event unique id
+	 * @param date         - date of event
+	 * @param timeInterval - time interval in day
+	 * @param author       - user id user.name
+	 * @param numberRoom   - number room in roomList
+	 * @param format       - accepts the date format 'dd-mm-yyyy'
+	 * @return - true if update was successful
+	 * @throws AttributeNotFoundException - throw if user did not make no one event
+	 */
 	public boolean updateEvent(Long id, String date, Long timeInterval, String author, Long numberRoom,
 			SimpleDateFormat format) throws AttributeNotFoundException {
 		if (id < 0L) {
@@ -133,6 +206,13 @@ public class Repository {
 
 	}
 
+	/**
+	 * 
+	 * @param username - unique name id
+	 * @param id       - event unique id
+	 * @return - deleted element
+	 * @throws AccessDeniedException - throw if user try delete not his own event
+	 */
 	public List<Event> deleteEvent(String username, Long id) throws AccessDeniedException {
 		List eventListBuf = new ArrayList<>();
 		for (Event event : eventList) {

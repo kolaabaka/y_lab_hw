@@ -9,8 +9,17 @@ import com.banturov.events.Repository;
 import com.banturov.events.User;
 import com.banturov.exceptions.AlreadyExistException;
 
+/**
+ * Class for providing a user interface
+ */
 public class EventLayer {
 
+	/**
+	 * 
+	 * @param scan   - take Scanner instance for input data
+	 * @param format - checks if the date is entered correctly
+	 * @param user   - authenticated user
+	 */
 	public static void eventPage(Scanner scan, SimpleDateFormat format, User user) {
 
 		SimpleDateFormat formatter = format;

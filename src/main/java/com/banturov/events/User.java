@@ -7,6 +7,11 @@ public class User {
 	private String name;
 	private String password;
 
+	/**
+	 * 
+	 * @param name     - unique id of users
+	 * @param password - key for authentification
+	 */
 	public User(String name, String password) {
 		this.name = name;
 		this.password = password;
