@@ -1,4 +1,4 @@
-package com.banturov.events;
+package com.banturov.entity;
 
 import java.util.Objects;
 
@@ -25,6 +25,14 @@ public class User {
 		this.name = name;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(name, password);
@@ -40,6 +48,11 @@ public class User {
 			return false;
 		User other = (User) obj;
 		return Objects.equals(name, other.name) && Objects.equals(password, other.password);
+	}
+
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", password=" + password + "]";
 	}
 
 }

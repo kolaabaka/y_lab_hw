@@ -4,7 +4,7 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
 
-import com.banturov.events.User;
+import com.banturov.entity.User;
 import com.banturov.interaction.EventLayer;
 import com.banturov.interaction.LoginLayer;
 
@@ -19,6 +19,7 @@ public class Main {
 		Scanner inputScan = new Scanner(System.in);
 		User user = LoginLayer.eventPage(inputScan);
 		EventLayer.eventPage(inputScan, format, user);
+		inputScan.close();
 	}
 
 }

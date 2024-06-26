@@ -1,4 +1,4 @@
-package com.banturov.events;
+package com.banturov.entity;
 
 import java.util.Objects;
 

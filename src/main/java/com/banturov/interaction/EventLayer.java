@@ -3,11 +3,10 @@ package com.banturov.interaction;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
-import javax.management.AttributeNotFoundException;
-
-import com.banturov.events.Repository;
-import com.banturov.events.User;
+import com.banturov.entity.User;
 import com.banturov.exceptions.AlreadyExistException;
+import com.banturov.exceptions.EntityNotExistException;
+import com.banturov.repository.EventRepository;
 
 /**
  * Class for providing a user interface
@@ -25,7 +24,7 @@ public class EventLayer {
 		SimpleDateFormat formatter = format;
 
 		Scanner input = scan;
-		Repository rep = new Repository();
+		EventRepository rep = new EventRepository();
 		boolean programFinish = false;
 		String menuSelect;
 
@@ -53,20 +52,22 @@ public class EventLayer {
 		}
 
 		while (!programFinish) {
-			System.out.println("Select menu");
+			System.out.println("Select menu\n1 - Show all rooms\n2 - Show all events\n3 - Add new room"
+					+ "\n4 - Add new event\n5 - View available slots DATE\n6 - View available slots AUTHOR"
+					+ "\n7 - View available slots NUMBER ROOM\n8 - Update envet" + "\n9 - Delete event\n10 - Exit");
 			menuSelect = input.next();
 			switch (menuSelect) {
 			case ("1"): // Show rooms
 				try {
 					System.out.println(rep.showRoom());
-				} catch (AttributeNotFoundException e) {
+				} catch (EntityNotExistException e) {
 					System.out.println(e.getMessage());
 				}
 				break;
 			case ("2"): // Show events
 				try {
 					System.out.println(rep.showEvent());
-				} catch (AttributeNotFoundException e) {
+				} catch (EntityNotExistException e) {
 					System.out.println(e.getMessage());
 				}
 				break;
@@ -96,26 +97,29 @@ public class EventLayer {
 				}
 				break;
 			case ("5"):// View available slots DATE
+				System.out.println("Enter date (dd-mm-yyyy)");
 				dateEventBuf = input.next();
 				try {
 					System.out.println(rep.filterDate(dateEventBuf));
-				} catch (AttributeNotFoundException e) {
+				} catch (EntityNotExistException e) {
 					System.out.println(e.getMessage());
 				}
 				break;
 			case ("6"):// View available slots AUTHOR
+				System.out.println("Enter author name");
 				authorEventBuf = input.next();
 				try {
 					System.out.println(rep.filterAuthor(authorEventBuf));
-				} catch (AttributeNotFoundException e) {
+				} catch (EntityNotExistException e) {
 					System.out.println(e.getMessage());
 				}
 				break;
 			case ("7"):// View available slots NUMBERROOM
+				System.out.println("Enter neumber of hall");
 				roomNumberBuf = input.nextLong();
 				try {
 					System.out.println(rep.filterNumberRoom(roomNumberBuf));
-				} catch (AttributeNotFoundException e) {
+				} catch (EntityNotExistException e) {
 					System.out.println(e.getMessage());
 				}
 				break;
@@ -132,11 +136,12 @@ public class EventLayer {
 				try {
 					rep.updateEvent(idEventBuf, dateEventBuf, timIntervalBuffer, authorEventBuf, roomNumberBuf,
 							formatter);
-				} catch (AttributeNotFoundException e) {
+				} catch (EntityNotExistException e) {
 					System.out.println(e.getMessage());
 				}
 				break;
 			case ("9"):// Delete by id
+				System.out.println("Enter event ID");
 				idEventBuf = input.nextLong();
 				authorEventBuf = user.getName();
 				try {
@@ -144,6 +149,10 @@ public class EventLayer {
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
+				break;
+			case ("10"):
+				System.out.println("Program finished");
+				programFinish = true;
 				break;
 			default:
 				System.out.println("Unsupported option");

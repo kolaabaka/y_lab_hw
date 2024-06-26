@@ -1,35 +1,38 @@
-package com.banturov.events;
+package com.banturov.repository;
 
 import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import javax.management.AttributeNotFoundException;
-
+import com.banturov.entity.Event;
+import com.banturov.entity.Room;
 import com.banturov.exceptions.AlreadyExistException;
+import com.banturov.exceptions.EntityNotExistException;
 
 /**
  * class for interaction with database
  */
-public class Repository {
+public class EventRepository {
 
 	/**
 	 * tables in database event -> room ManyToOne foreign key event.numberRoom
 	 */
-	List<Event> eventList = new ArrayList<>();
-	List<Room> roomList = new ArrayList<>();
+	Set<Event> eventList = new HashSet<>();
+	Set<Room> roomList = new HashSet<>();
 
 	/**
 	 * Show all saved halls
 	 * 
 	 * @return - all saved halls
-	 * @throws AttributeNotFoundException - throw if roomList is empty
+	 * @throws EntityNotExistException - throw if roomList is empty
 	 */
-	public List<Room> showRoom() throws AttributeNotFoundException {
+	public Set<Room> showRoom() throws EntityNotExistException {
 		if (roomList.isEmpty()) {
-			throw new AttributeNotFoundException("No one room created");
+			throw new EntityNotExistException("No one room created");
 		}
 		return roomList;
 	}
@@ -38,11 +41,11 @@ public class Repository {
 	 * Show all saved events
 	 * 
 	 * @return - all saved events
-	 * @throws AttributeNotFoundException - throw if eventList is empty
+	 * @throws EntityNotExistException - throw if eventList is empty
 	 */
-	public List<Event> showEvent() throws AttributeNotFoundException {
+	public Set<Event> showEvent() throws EntityNotExistException {
 		if (eventList.isEmpty()) {
-			throw new AttributeNotFoundException("No one event created");
+			throw new EntityNotExistException("No one event created");
 		}
 		return eventList;
 	}
@@ -75,11 +78,11 @@ public class Repository {
 	 * @param author       - user id user.name
 	 * @param numberRoom   - number room in roomList
 	 * @param format       - accepts the date format 'dd-mm-yyyy'
-	 * @throws AttributeNotFoundException - throw if select room is not exist
-	 * @throws IllegalArgumentException   - throw if incorrect validation
+	 * @throws EntityNotExistException  - throw if select room is not exist
+	 * @throws IllegalArgumentException - throw if incorrect validation
 	 */
 	public void addEvent(Long id, String date, Long timeInterval, String author, Long numberRoom,
-			SimpleDateFormat format) throws AttributeNotFoundException, IllegalArgumentException {
+			SimpleDateFormat format) throws IllegalArgumentException, EntityNotExistException {
 		if (id < 0L) {
 			throw new IllegalArgumentException("Room number can be digit more 0");
 		}
@@ -94,7 +97,7 @@ public class Repository {
 
 		Room roomBuf = new Room(numberRoom);
 		if (!roomList.contains(roomBuf)) {
-			throw new AttributeNotFoundException("No room with id " + numberRoom);
+			throw new EntityNotExistException("No room with id " + numberRoom);
 		}
 
 		for (Event event : eventList) {
@@ -116,16 +119,16 @@ public class Repository {
 	 * 
 	 * @param date - select date
 	 * @return - list of elements satisfying the condition
-	 * @throws AttributeNotFoundException - throw if no elements satisfying the
-	 *                                    condition
+	 * @throws EntityNotExistException - throw if no elements satisfying the
+	 *                                 condition
 	 */
-	public List<Event> filterDate(String date) throws AttributeNotFoundException {
+	public List<Event> filterDate(String date) throws EntityNotExistException {
 		List<Event> takenEvents = new ArrayList<>();
 		for (Event event : eventList)
 			if (event.getDate().equals(date))
 				takenEvents.add(event);
 		if (takenEvents.isEmpty())
-			throw new AttributeNotFoundException("No one events");
+			throw new EntityNotExistException("No one events");
 		return takenEvents;
 	}
 
@@ -134,16 +137,16 @@ public class Repository {
 	 * 
 	 * @param author - select author
 	 * @return - list of elements satisfying the condition
-	 * @throws AttributeNotFoundException - throw if no elements satisfying the
-	 *                                    condition
+	 * @throws EntityNotExistException - throw if no elements satisfying the
+	 *                                 condition
 	 */
-	public List<Event> filterAuthor(String author) throws AttributeNotFoundException {
+	public List<Event> filterAuthor(String author) throws EntityNotExistException {
 		List<Event> takenEvents = new ArrayList<>();
 		for (Event event : eventList)
 			if (event.getAuthor().equals(author))
 				takenEvents.add(event);
 		if (takenEvents.isEmpty())
-			throw new AttributeNotFoundException("No one events");
+			throw new EntityNotExistException("No one events");
 		return takenEvents;
 	}
 
@@ -152,16 +155,16 @@ public class Repository {
 	 * 
 	 * @param numberRoom - select number of hall
 	 * @return - list of elements satisfying the condition
-	 * @throws AttributeNotFoundException - throw if no elements satisfying the
-	 *                                    condition
+	 * @throws EntityNotExistException - throw if no elements satisfying the
+	 *                                 condition
 	 */
-	public List<Event> filterNumberRoom(Long numberRoom) throws AttributeNotFoundException {
+	public List<Event> filterNumberRoom(Long numberRoom) throws EntityNotExistException {
 		List<Event> takenEvents = new ArrayList<>();
 		for (Event event : eventList)
 			if (event.getNumberRoom() == numberRoom)
 				takenEvents.add(event);
 		if (takenEvents.isEmpty())
-			throw new AttributeNotFoundException("No one events");
+			throw new EntityNotExistException("No one events");
 		return takenEvents;
 	}
 
@@ -174,10 +177,10 @@ public class Repository {
 	 * @param numberRoom   - number room in roomList
 	 * @param format       - accepts the date format 'dd-mm-yyyy'
 	 * @return - true if update was successful
-	 * @throws AttributeNotFoundException - throw if user did not make no one event
+	 * @throws EntityNotExistException - throw if user did not make no one event
 	 */
 	public boolean updateEvent(Long id, String date, Long timeInterval, String author, Long numberRoom,
-			SimpleDateFormat format) throws AttributeNotFoundException {
+			SimpleDateFormat format) throws EntityNotExistException {
 		if (id < 0L) {
 			throw new IllegalArgumentException("Room number can be digit more 0");
 		}
@@ -192,7 +195,7 @@ public class Repository {
 
 		Room roomBuf = new Room(numberRoom);
 		if (!roomList.contains(roomBuf)) {
-			throw new AttributeNotFoundException("No room with id " + numberRoom);
+			throw new EntityNotExistException("No room with id " + numberRoom);
 		}
 
 		for (Event event : eventList)
@@ -202,7 +205,7 @@ public class Repository {
 				event.setNumberRoom(numberRoom);
 				return true;
 			}
-		throw new AttributeNotFoundException("No one your events");
+		throw new EntityNotExistException("No one your events");
 
 	}
 
@@ -214,7 +217,7 @@ public class Repository {
 	 * @throws AccessDeniedException - throw if user try delete not his own event
 	 */
 	public List<Event> deleteEvent(String username, Long id) throws AccessDeniedException {
-		List eventListBuf = new ArrayList<>();
+		List<Event> eventListBuf = new ArrayList<>();
 		for (Event event : eventList) {
 			if (event.getId() == id) {
 				if (!event.getAuthor().equals(username)) {

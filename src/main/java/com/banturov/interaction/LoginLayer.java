@@ -1,10 +1,9 @@
 package com.banturov.interaction;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-import com.banturov.events.User;
+import com.banturov.entity.User;
+import com.banturov.repository.UserRepository;
 
 /**
  * Registers users and performs authentication
@@ -19,7 +18,7 @@ public class LoginLayer {
 		Scanner input = scan;
 		boolean programFinish = false;
 
-		List<User> userList = new ArrayList<>();
+		UserRepository rep = new UserRepository();
 
 		String menuSelect;
 
@@ -35,10 +34,8 @@ public class LoginLayer {
 				nameBuf = input.next();
 				System.out.println("Input password");
 				passwordBuf = input.next();
-				if (userList.contains(new User(nameBuf, passwordBuf))) {
+				if (rep.checkUserExist(nameBuf, passwordBuf)) {
 					programFinish = true;
-				} else {
-					System.out.println("There is no such user");
 				}
 				break;
 			case ("2"):
@@ -46,7 +43,11 @@ public class LoginLayer {
 				nameBuf = input.next();
 				System.out.println("Input password");
 				passwordBuf = input.next();
-				userList.add(new User(nameBuf, passwordBuf));
+				try {
+					rep.addUser(nameBuf, passwordBuf);
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
 				break;
 			default:
 				System.out.println("Unsupported option");
