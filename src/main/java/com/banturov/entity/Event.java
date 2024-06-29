@@ -28,6 +28,8 @@ public class Event {
 		this.author = author;
 		this.numberRoom = numberRoom;
 	}
+	
+	public Event() {}
 
 	public Long getId() {
 		return id;

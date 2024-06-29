@@ -1,4 +1,4 @@
-package com.banturov.exceptions;
+package com.banturov.exception;
 
 /**
  * Custom exception to exclude the addition of duplicates
