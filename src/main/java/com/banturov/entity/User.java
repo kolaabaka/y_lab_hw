@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class User {
 
+	private Long id;
 	private String name;
 	private String password;
 
@@ -15,6 +16,10 @@ public class User {
 	public User(String name, String password) {
 		this.name = name;
 		this.password = password;
+	}
+	
+	public User(String name) {
+		this.name = name;
 	}
 
 	public String getName() {
@@ -33,9 +38,17 @@ public class User {
 		this.password = password;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, password);
+		return Objects.hash(id, name, password);
 	}
 
 	@Override
@@ -47,12 +60,15 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(name, other.name) && Objects.equals(password, other.password);
+		return Objects.equals(id, other.id) && Objects.equals(name, other.name)
+				&& Objects.equals(password, other.password);
 	}
 
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", password=" + password + "]";
+		return "User [id=" + id + ", name=" + name + ", password=" + password + "]";
 	}
+
+	
 
 }
