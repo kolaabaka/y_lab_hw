@@ -15,7 +15,7 @@ import com.banturov.liquibase.LiquibasePrepare;
  */
 public class Main {
 
-	private static final String URL = "jdbc:mysql://localhost:3306/event-room";
+	private static final String URL = "jdbc:postgresql://localhost:3306/event-room";
 	private static final String USER_NAME = "root";
 	private static final String PASSWORD = "root";
 
