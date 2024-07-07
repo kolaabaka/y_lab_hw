@@ -1,12 +1,13 @@
 package com.banturov.main;
 
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Scanner;
-import java.text.SimpleDateFormat;
 
 import com.banturov.entity.User;
 import com.banturov.interaction.EventLayer;
 import com.banturov.interaction.LoginLayer;
+import com.banturov.liquibase.LiquibasePrepare;
 
 /**
  * Main class for launching the application, uses statics methods, Passes an
@@ -14,11 +15,16 @@ import com.banturov.interaction.LoginLayer;
  */
 public class Main {
 
+	private static final String URL = "jdbc:postgresql://localhost:3306/event-room";
+	private static final String USER_NAME = "root";
+	private static final String PASSWORD = "root";
+
 	public static void main(String[] args) {
-		SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
 		Scanner inputScan = new Scanner(System.in);
-		User user = LoginLayer.eventPage(inputScan);
-		EventLayer.eventPage(inputScan, format, user);
+		LiquibasePrepare.prepare(USER_NAME, PASSWORD, URL);
+		SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy", Locale.ENGLISH);
+		User user = LoginLayer.eventPage(USER_NAME, PASSWORD, URL, inputScan);
+		EventLayer.eventPage(USER_NAME, PASSWORD, URL, inputScan, format, user);
 		inputScan.close();
 	}
 

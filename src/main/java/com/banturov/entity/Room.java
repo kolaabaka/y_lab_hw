@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class Room {
 
+	private Long id;
 	private Long roomNumber;
 
 	public Room() {
@@ -27,7 +28,7 @@ public class Room {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(roomNumber);
+		return Objects.hash(id, roomNumber);
 	}
 
 	@Override
@@ -39,12 +40,21 @@ public class Room {
 		if (getClass() != obj.getClass())
 			return false;
 		Room other = (Room) obj;
-		return Objects.equals(roomNumber, other.roomNumber);
+		return Objects.equals(id, other.id) && Objects.equals(roomNumber, other.roomNumber);
 	}
 
 	@Override
 	public String toString() {
-		return "\n||Room " + roomNumber + " number||\n";
+		return "Room [id=" + id + ", roomNumber=" + roomNumber + "]";
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	
 }
